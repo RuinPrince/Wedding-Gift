@@ -63,7 +63,7 @@ const lettersData: Letter[] = [
 ];
 
 // --- THE SECRET CODE ---
-const SECRET_CODE = "MoonPrincess"; 
+const SECRET_CODE = "moonprincess"; 
 
 export default function LettersSection() {
   const [isUnlocked, setIsUnlocked] = useState(false);
