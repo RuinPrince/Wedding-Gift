@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -62,8 +62,42 @@ const lettersData: Letter[] = [
   }
 ];
 
-// --- THE SECRET CODE ---
 const SECRET_CODE = "moonprincess"; 
+
+// --- BACKGROUND FLOATING HEARTS ---
+const FloatingHearts = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={`heart-${i}`}
+          className="absolute text-pink-300/30"
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: window.innerHeight + 100,
+            scale: Math.random() * 0.5 + 0.5,
+          }}
+          animate={{
+            y: -100,
+            rotate: Math.random() * 360,
+          }}
+          transition={{
+            duration: Math.random() * 10 + 15,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 10,
+          }}
+        >
+          <Heart fill="currentColor" size={32} />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 export default function LettersSection() {
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -71,7 +105,6 @@ export default function LettersSection() {
   const [code, setCode] = useState('');
   const [error, setError] = useState(false);
 
-  // Safely check sessionStorage on mount to avoid hydration errors
   useEffect(() => {
     setIsMounted(true);
     if (sessionStorage.getItem('lettersUnlocked') === 'true') {
@@ -87,133 +120,139 @@ export default function LettersSection() {
       setError(false);
     } else {
       setError(true);
-      setCode(''); // Clear input on error
+      setCode(''); 
     }
   };
 
-  // Prevent rendering until hydration is complete
   if (!isMounted) return null;
 
-// --- THE LOCKED STATE UI ---
-  if (!isUnlocked) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh] px-4 relative z-10 py-12">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative w-full max-w-md bg-white rounded-3xl border border-pink-100 p-8 md:p-10 text-center shadow-xl overflow-hidden"
-        >
-          {/* Clean, smooth top gradient instead of the broken circle */}
-          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-pink-50 to-transparent pointer-events-none" />
+  return (
+    // Wrap the entire page in a responsive main tag that accounts for the fixed Navbar
+    <main className="relative min-h-screen pt-24 sm:pt-32 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
+      
+      {/* Background Hearts for both Locked and Unlocked states */}
+      <FloatingHearts />
 
-          <div className="relative z-10 flex flex-col items-center">
-            
-            {/* Centered Lock Icon */}
-            <div className="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mb-6 shadow-sm border border-pink-200">
-              <Lock size={28} strokeWidth={2} />
-            </div>
-            
-            <h2 className="text-3xl font-serif font-black text-slate-800 mb-2">Top Secret</h2>
-            <p className="text-slate-500 mb-8 text-sm px-2">
-              These letters are meant only for your eyes. Enter the secret code to unlock.
-            </p>
+      {/* --- THE LOCKED STATE UI --- */}
+      {!isUnlocked ? (
+        <div className="flex items-center justify-center min-h-[60vh] relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative w-full max-w-md bg-white rounded-3xl border border-pink-100 p-8 md:p-10 text-center shadow-xl overflow-hidden mx-auto"
+          >
+            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-pink-50 to-transparent pointer-events-none" />
 
-            <form onSubmit={handleUnlock} className="w-full space-y-5">
-              
-              {/* FIX: Foolproof input wrapper for the Key icon */}
-              <div className="relative flex items-center w-full">
-                <input 
-                  type="password" 
-                  placeholder="Enter secret code..."
-                  value={code}
-                  onChange={(e) => { setCode(e.target.value); setError(false); }}
-                  className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 rounded-xl focus:outline-none focus:bg-white text-slate-700 font-medium transition-colors ${
-                    error ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-pink-400'
-                  }`}
-                />
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mb-6 shadow-sm border border-pink-200">
+                <Lock size={28} strokeWidth={2} />
               </div>
               
-              {error && (
-                <p className="text-red-500 text-sm font-bold m-0">
-                  Oops! Incorrect code. Try again.
-                </p>
-              )}
+              <h2 className="text-3xl font-serif font-black text-slate-800 mb-2">Top Secret</h2>
+              <p className="text-slate-500 mb-8 text-sm px-2">
+                These letters are meant only for your eyes. Enter the secret code to unlock.
+              </p>
 
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                className="w-full mt-2 py-4 bg-slate-800 text-white font-bold uppercase tracking-widest text-sm rounded-xl shadow-[0_5px_0_rgb(30,41,59)] hover:translate-y-[2px] hover:shadow-[0_3px_0_rgb(30,41,59)] transition-all"
-              >
-                Unlock Letters
-              </motion.button>
-            </form>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
+              <form onSubmit={handleUnlock} className="w-full space-y-5">
+                <div className="relative flex items-center w-full">
+                  <input 
+                    type="password" 
+                    placeholder="Enter secret code..."
+                    value={code}
+                    onChange={(e) => { setCode(e.target.value); setError(false); }}
+                    className={`w-full px-4 py-4 bg-slate-50 border-2 rounded-xl focus:outline-none focus:bg-white text-slate-700 font-medium transition-colors text-center ${
+                      error ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-pink-400'
+                    }`}
+                  />
+                </div>
+                
+                {error && (
+                  <p className="text-red-500 text-sm font-bold m-0">
+                    Oops! Incorrect code. Try again.
+                  </p>
+                )}
 
-  // --- THE UNLOCKED STATE UI (Your original code) ---
-  return (
-    <div className="max-w-6xl mx-auto px-6 relative z-10">
-      
-      {/* Header Section */}
-      <div className="text-center mb-16 flex flex-col items-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center"
-        >
-          <div className="inline-flex items-center justify-center p-4 bg-pink-100 text-pink-500 rounded-full mb-6">
-            <Mail size={32} />
-          </div>
-
-          <h2 className="text-4xl md:text-5xl font-serif text-pink-600 mb-4 font-bold flex items-center justify-center gap-4">
-            <Heart className="text-pink-500 fill-pink-500 hidden md:block" size={36} />
-            Letters of Love
-            <Heart className="text-pink-500 fill-pink-500 hidden md:block" size={36} />
-          </h2>
-          
-          <p className="text-slate-500 max-w-lg mx-auto">
-            Heartfelt messages from the people who know us best.
-          </p>
-        </motion.div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {lettersData.map((letter, index) => (
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: (index % 2) * 0.15 }} 
-            key={letter.id} 
-            className="w-full bg-[#EFEFEF] bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] border-x-4 border-t-8 border-b-4 border-slate-800 p-8 shadow-xl relative flex flex-col hover:-translate-y-1 transition-all duration-300 min-h-full"
-          >
-            <div className="text-right text-sm text-slate-500 mb-6 font-serif font-bold border-b-2 border-slate-300 pb-3">
-              {letter.date}
-            </div>
-            
-            <div className="text-slate-900 font-serif text-lg leading-relaxed mb-10 flex-grow">
-              {letter.content.split('\n').map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              ))}
-            </div>
-            
-            <div className="text-right mt-auto pt-4 border-t border-slate-300/50">
-              <span className="font-medium text-slate-500 text-sm mr-2 italic">With love,</span>
-              <br />
-              <span className="text-xl font-serif font-black tracking-widest text-slate-900 uppercase mt-1 inline-block">
-                {letter.sender}
-              </span>
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  className="w-full mt-2 py-4 bg-slate-800 text-white font-bold uppercase tracking-widest text-sm rounded-xl shadow-[0_5px_0_rgb(30,41,59)] hover:translate-y-[2px] hover:shadow-[0_3px_0_rgb(30,41,59)] transition-all"
+                >
+                  Unlock Letters
+                </motion.button>
+              </form>
             </div>
           </motion.div>
-        ))}
-      </div>
-    </div>
+        </div>
+      ) : (
+
+      // --- THE UNLOCKED STATE UI ---
+        <div className="max-w-6xl mx-auto relative z-10">
+          
+          {/* Header Section */}
+          <div className="text-center mb-10 sm:mb-16 flex flex-col items-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center w-full"
+            >
+              <div className="inline-flex items-center justify-center p-3 sm:p-4 bg-pink-100 text-pink-500 rounded-full mb-4 sm:mb-6 shadow-sm">
+                <Mail className="w-6 h-6 sm:w-8 sm:h-8" />
+              </div>
+
+              {/* Responsive Header */}
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-pink-600 mb-4 font-bold flex items-center justify-center gap-2 sm:gap-4 text-center">
+                <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
+                Letters of Love
+                <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
+              </h2>
+              
+              <p className="text-sm sm:text-base text-slate-500 max-w-lg mx-auto px-2">
+                Heartfelt messages from the people who know you guys.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Responsive Grid for Letters */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+            {lettersData.map((letter, index) => (
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: (index % 2) * 0.15 }} 
+                key={letter.id} 
+                // FIX: Clean, beautiful white/pink card matching Image 1
+                className="w-full bg-white/90 backdrop-blur-md border-2 border-pink-100 rounded-[2rem] p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgb(255,192,203,0.3)] relative flex flex-col hover:-translate-y-1 transition-all duration-300 min-h-full"
+              >
+                {/* Date at the top right */}
+                <div className="text-right text-xs sm:text-sm text-pink-400 mb-6 font-serif font-bold uppercase tracking-widest">
+                  {letter.date}
+                </div>
+                
+                {/* Letter Content: Left aligned as requested */}
+                <div className="text-slate-700 font-serif text-base sm:text-lg leading-relaxed mb-10 flex-grow text-left">
+                  {letter.content.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </div>
+                
+                {/* Signature at the bottom right */}
+                <div className="text-right mt-auto pt-6 border-t border-pink-100">
+                  <span className="font-medium text-slate-400 text-sm mr-2 italic">With love,</span>
+                  <br />
+                  <span className="text-xl sm:text-2xl font-serif font-black tracking-widest text-slate-800 uppercase mt-1 inline-block">
+                    {letter.sender}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+    </main>
   );
 }
