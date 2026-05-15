@@ -96,7 +96,7 @@ export default function BirthdayMoons() {
           <div className="max-w-3xl">
             <h4 className="font-bold text-pink-600 uppercase tracking-widest text-sm sm:text-base mb-2">Cosmic Coincidence</h4>
             <p className="text-slate-700 font-serif leading-relaxed text-base sm:text-lg">
-              Despite being born six years apart, Bharath and Harini were born under the exact same moon phase—the <strong>Waning Crescent</strong>. Some things truly are just written in the stars! ✨
+              Despite being born six years apart, Potato and Pattuh were born under the exact same moon phase—the <strong>Waning Crescent</strong>. Some things truly are just written in the stars! ✨
             </p>
           </div>
         </motion.div>
