@@ -111,7 +111,7 @@ export default function SymphonyPage() {
           </h2>
           
           <p className="text-sm sm:text-base text-slate-500 max-w-xl mx-auto px-2">
-            Every love story has a soundtrack. Watch the beautiful moments our wedding melodies were composed on the keys.
+            Every love story has a soundtrack. 
           </p>
         </motion.div>
       </div>

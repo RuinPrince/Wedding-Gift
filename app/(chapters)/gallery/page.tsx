@@ -13,11 +13,46 @@ interface MediaPolaroidProps {
   onClick?: () => void;
 }
 
+// --- BACKGROUND FLOATING HEARTS ---
+const FloatingHearts = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={`heart-${i}`}
+          className="absolute text-pink-300/30"
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: window.innerHeight + 100,
+            scale: Math.random() * 0.5 + 0.5,
+          }}
+          animate={{
+            y: -100,
+            rotate: Math.random() * 360,
+          }}
+          transition={{
+            duration: Math.random() * 10 + 15,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 10,
+          }}
+        >
+          <Heart fill="currentColor" size={32} />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
 const MediaPolaroid = ({ title, subtitle, mediaSrc, type, onClick }: MediaPolaroidProps) => (
   <motion.div 
     whileHover={{ y: -5, scale: 1.02, rotate: (Math.random() > 0.5 ? 2 : -2) }}
     onClick={onClick}
-    className="bg-white p-4 rounded-3xl shadow-xl border-2 border-pink-100 w-full cursor-pointer transition-shadow hover:shadow-pink-200/50"
+    className="bg-white p-3 sm:p-4 rounded-[2rem] shadow-xl border-2 border-pink-100 w-full cursor-pointer transition-shadow hover:shadow-pink-200/50"
   >
     <div className={`relative overflow-hidden rounded-2xl border border-pink-100 ${type === 'video' ? 'bg-slate-900 aspect-video' : 'bg-slate-100 aspect-square'}`}>
       {type === 'video' ? (
@@ -30,13 +65,13 @@ const MediaPolaroid = ({ title, subtitle, mediaSrc, type, onClick }: MediaPolaro
           className="w-full h-full object-contain rounded-2xl bg-slate-900"
         />
       ) : (
-        <img src={mediaSrc} alt={title} loading="lazy" className="w-full h-full object-contain rounded-2xl transition-transform duration-500 hover:scale-105" />
+        <img src={mediaSrc} alt={title} loading="lazy" className="w-full h-full object-cover rounded-2xl transition-transform duration-500 hover:scale-105" />
       )}
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-white/40 backdrop-blur-sm rotate-2 shadow-sm border border-white/50 z-10" />
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 sm:w-24 h-5 sm:h-6 bg-white/40 backdrop-blur-sm rotate-2 shadow-sm border border-white/50 z-10" />
     </div>
-    <div className="mt-4 text-center pb-2">
-      <h3 className="font-serif text-xl font-bold text-slate-800">{title}</h3>
-      {subtitle && <p className="text-sm font-bold text-pink-400 uppercase tracking-widest mt-1">{subtitle}</p>}
+    <div className="mt-4 text-center pb-2 px-2">
+      <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-800 truncate">{title}</h3>
+      {subtitle && <p className="text-[10px] sm:text-xs font-bold text-pink-400 uppercase tracking-widest mt-1">{subtitle}</p>}
     </div>
   </motion.div>
 );
@@ -229,7 +264,7 @@ export default function GalleryPage() {
     { id: "a-54", type: "video", title: "Video #54", subtitle: "Atrocities", mediaSrc: "/gallery/Alagar-Kovil-Atrocities/62.mp4" }
   ];
 
-const coupleMedia: MediaPolaroidProps[] & { id: string }[] = [
+  const coupleMedia: MediaPolaroidProps[] & { id: string }[] = [
     { id: "c-1", type: "image", title: "Memory #1", subtitle: "Chronicles", mediaSrc: "/gallery/Couple-Chronicles/1.jpg" },
     { id: "c-2", type: "image", title: "Memory #2", subtitle: "Chronicles", mediaSrc: "/gallery/Couple-Chronicles/2.jpg" },
     { id: "c-3", type: "image", title: "Memory #3", subtitle: "Chronicles", mediaSrc: "/gallery/Couple-Chronicles/3.jpg" },
@@ -331,7 +366,6 @@ const coupleMedia: MediaPolaroidProps[] & { id: string }[] = [
     { id: "m-6", type: "video", title: "Video #7", subtitle: "Madness", mediaSrc: "/gallery/Mehendi-Madness/6.mp4" }
   ];
 
-  // Helper function to get the current media array based on view
   const activeMedia = 
     currentView === 'flowering' ? floweringMedia :
     currentView === 'alagar' ? alagarMedia :
@@ -339,172 +373,114 @@ const coupleMedia: MediaPolaroidProps[] & { id: string }[] = [
     currentView === 'mehendi' ? mehendiMedia : [];
 
   return (
-    <main className="min-h-screen py-24 px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50">
+    <main className="relative min-h-screen pt-24 sm:pt-32 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
       
-      {/* Header slightly changes based on view */}
-      <div className="text-center mb-12">
-        <div className="inline-flex items-center justify-center p-4 bg-pink-100 text-pink-500 rounded-full mb-6 shadow-sm">
-          <Camera size={32} />
-        </div>
-        
-        {/* UPDATED TITLE: Added the flex container and Heart icons! */}
-        <h2 className="text-4xl md:text-5xl font-serif text-pink-600 mb-4 font-bold flex items-center justify-center gap-4">
-          <Heart className="text-pink-500 hidden md:block" size={36} strokeWidth={2.5} />
-          {currentView === 'albums' ? 'Memories' : 'Album'}
-          <Heart className="text-pink-500 hidden md:block" size={36} strokeWidth={2.5} />
-        </h2>
+      {/* Background Hearts */}
+      <FloatingHearts />
 
-        {currentView === 'albums' && (
-          <p className="text-slate-500 max-w-xl mx-auto text-lg">
-            A messy, beautiful collection of our favorite things, comfort moments, and atrocities.
-          </p>
+      {/* Header Section */}
+      <div className="relative z-10 text-center mb-10 sm:mb-16 flex flex-col items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center w-full"
+        >
+          <div className="inline-flex items-center justify-center p-3 sm:p-4 bg-pink-100 text-pink-500 rounded-full mb-4 sm:mb-6 shadow-sm">
+            <Camera className="w-6 h-6 sm:w-8 sm:h-8" />
+          </div>
+          
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-pink-600 mb-4 font-bold flex items-center justify-center gap-2 sm:gap-4 text-center">
+            <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
+            {currentView === 'albums' ? 'Our Memories' : 'Album View'}
+            <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
+          </h2>
+
+          {currentView === 'albums' && (
+            <p className="text-sm sm:text-lg text-slate-500 max-w-xl mx-auto px-2">
+              A messy, beautiful collection of our favorite things, comfort moments, and atrocities.
+            </p>
+          )}
+        </motion.div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-6xl mx-auto">
+        {currentView === 'albums' ? (
+          // --- ALBUMS VIEW ---
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12"
+          >
+            {[
+              { id: 'flowering', title: 'Flowering Ceremony', count: floweringMedia.length, img: floweringMedia[15]?.mediaSrc || floweringMedia[0]?.mediaSrc },
+              { id: 'alagar', title: 'Alagar Kovil Atrocities', count: alagarMedia.length, img: alagarMedia[0]?.mediaSrc },
+              { id: 'couple', title: 'Couple Chronicles', count: coupleMedia.length, img: coupleMedia[6]?.mediaSrc || coupleMedia[0]?.mediaSrc },
+              { id: 'mehendi', title: 'Mehendi Madness', count: mehendiMedia.length, img: mehendiMedia[0]?.mediaSrc }
+            ].map((album) => (
+              <div
+                key={album.id}
+                onClick={() => setCurrentView(album.id as any)}
+                className="group cursor-pointer flex flex-col"
+              >
+                <div className="relative w-full aspect-square md:aspect-[4/5] rounded-3xl sm:rounded-[3rem] overflow-hidden shadow-xl border-4 sm:border-8 border-white transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-pink-200/50">
+                  <img
+                    src={album.img} 
+                    alt={album.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                </div>
+                <div className="mt-4 sm:mt-6 text-center">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-slate-800 mb-1 transition-colors group-hover:text-pink-600">
+                    {album.title}
+                  </h3>
+                  <p className="text-pink-400 font-bold tracking-widest uppercase text-[10px] sm:text-xs">
+                    {album.count} Memories
+                  </p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        ) : (
+          // --- INSIDE FOLDER VIEW ---
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-24"
+          >
+            <button 
+              onClick={() => setCurrentView('albums')}
+              className="mb-8 sm:mb-10 flex items-center gap-2 px-5 py-2 sm:px-6 sm:py-3 bg-white border-2 border-pink-100 text-pink-500 hover:bg-pink-50 hover:text-pink-600 rounded-full text-sm sm:text-base font-bold transition-all shadow-sm group mx-auto md:mx-0"
+            >
+              <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+              Back to Albums
+            </button>
+
+            <div className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 mb-8 sm:mb-10 border-b-2 border-pink-100 pb-4">
+              <h3 className="text-2xl sm:text-4xl font-serif text-slate-800 font-bold text-center md:text-left">
+                {currentView === 'flowering' ? 'Flowering Ceremony' : 
+                 currentView === 'alagar' ? 'Alagar Kovil Atrocities' :
+                 currentView === 'couple' ? 'Couple Chronicles' : 'Mehendi Madness'}
+              </h3>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {activeMedia.map((media, index) => (
+                <MediaPolaroid
+                  key={index}
+                  type={media.type} 
+                  title={media.title} 
+                  subtitle={media.subtitle} 
+                  mediaSrc={media.mediaSrc} 
+                  onClick={() => setSelectedMedia(media)} 
+                />
+              ))}
+            </div>
+          </motion.div>
         )}
       </div>
 
-      {currentView === 'albums' ? (
-        // --- ALBUMS VIEW: Grid of Four Cover Cards ---
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-start"
-        >
-          {/* Cover Card 1: Flowering */}
-          <div
-            onClick={() => setCurrentView('flowering')}
-            className="group cursor-pointer flex flex-col"
-          >
-            <div className="relative w-full aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl border-8 border-white transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-pink-200/50">
-              <img
-                src={floweringMedia[15]?.mediaSrc} 
-                alt="Flowering Ceremony Album"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </div>
-            <div className="mt-6 text-center">
-              <h3 className="text-3xl font-serif font-bold text-slate-800 mb-2 transition-colors group-hover:text-pink-600">
-                Flowering Ceremony
-              </h3>
-              <p className="text-pink-400 font-bold tracking-widest uppercase text-sm">
-                {floweringMedia.length} Memories
-              </p>
-            </div>
-          </div>
-
-          {/* Cover Card 2: Alagar */}
-          <div
-            onClick={() => setCurrentView('alagar')}
-            className="group cursor-pointer flex flex-col"
-          >
-            <div className="relative w-full aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl border-8 border-white transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-pink-200/50">
-              <img
-                src={alagarMedia[0]?.mediaSrc} 
-                alt="Alagar Kovil Atrocities Album"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </div>
-            <div className="mt-6 text-center">
-              <h3 className="text-3xl font-serif font-bold text-slate-800 mb-2 transition-colors group-hover:text-pink-600">
-                Alagar Kovil Atrocities
-              </h3>
-              <p className="text-pink-400 font-bold tracking-widest uppercase text-sm">
-                {alagarMedia.length} Memories
-              </p>
-            </div>
-          </div>
-
-          {/* Cover Card 3: Couple Chronicles */}
-          <div
-            onClick={() => setCurrentView('couple')}
-            className="group cursor-pointer flex flex-col"
-          >
-            <div className="relative w-full aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl border-8 border-white transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-pink-200/50">
-              <img
-                src={coupleMedia[6]?.mediaSrc} 
-                alt="Couple Chronicles Album"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </div>
-            <div className="mt-6 text-center">
-              <h3 className="text-3xl font-serif font-bold text-slate-800 mb-2 transition-colors group-hover:text-pink-600">
-                Couple Chronicles
-              </h3>
-              <p className="text-pink-400 font-bold tracking-widest uppercase text-sm">
-                {coupleMedia.length} Memories
-              </p>
-            </div>
-          </div>
-
-          {/* Cover Card 4: Mehendi Madness */}
-          <div
-            onClick={() => setCurrentView('mehendi')}
-            className="group cursor-pointer flex flex-col"
-          >
-            <div className="relative w-full aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl border-8 border-white transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-pink-200/50">
-              <img
-                src={mehendiMedia[0]?.mediaSrc} 
-                alt="Mehendi Madness Album"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </div>
-            <div className="mt-6 text-center">
-              <h3 className="text-3xl font-serif font-bold text-slate-800 mb-2 transition-colors group-hover:text-pink-600">
-                Mehendi Madness
-              </h3>
-              <p className="text-pink-400 font-bold tracking-widest uppercase text-sm">
-                {mehendiMedia.length} Memories
-              </p>
-            </div>
-          </div>
-
-        </motion.div>
-
-      ) : (
-        // --- INSIDE FOLDER VIEW: Grid of polaroids ---
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-6xl mx-auto mb-24"
-        >
-          {/* Back Button */}
-          <button 
-            onClick={() => setCurrentView('albums')}
-            className="mb-10 flex items-center gap-2 px-6 py-3 bg-white border-2 border-pink-100 text-pink-500 hover:bg-pink-50 hover:text-pink-600 rounded-full font-bold transition-all shadow-sm group"
-          >
-            <ArrowLeft size={20} className="transition-transform group-hover:-translate-x-1" />
-            Back to Albums
-          </button>
-
-          {/* Album Title Header */}
-          <div className="flex items-center gap-3 mb-10 border-b-2 border-pink-100 pb-4">
-            {currentView === 'flowering' && <Flower className="text-pink-500" size={32} />}
-            {currentView === 'alagar' && <Sparkles className="text-pink-500" size={32} />}
-            {currentView === 'couple' && <Heart className="text-pink-500" size={32} />}
-            {currentView === 'mehendi' && <Sparkles className="text-pink-500" size={32} />}
-            
-            <h3 className="text-4xl font-serif text-slate-800 font-bold">
-              {currentView === 'flowering' ? 'Flowering Ceremony' : 
-               currentView === 'alagar' ? 'Alagar Kovil Atrocities' :
-               currentView === 'couple' ? 'Couple Chronicles' : 'Mehendi Madness'}
-            </h3>
-          </div>
-          
-          {/* Photo Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {activeMedia.map((media, index) => (
-              <MediaPolaroid
-                key={index}
-                type={media.type} 
-                title={media.title} 
-                subtitle={media.subtitle} 
-                mediaSrc={media.mediaSrc} 
-                onClick={() => setSelectedMedia(media)} 
-              />
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      {/* MODAL PORTAL: Teleports the overlay directly to the document body! */}
+      {/* MODAL PORTAL */}
       {mounted && createPortal(
         <AnimatePresence>
           {selectedMedia && (
@@ -513,65 +489,43 @@ const coupleMedia: MediaPolaroidProps[] & { id: string }[] = [
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedMedia(null)}
-              className="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md cursor-zoom-out"
+              className="fixed inset-0 flex items-center justify-center bg-black/95 backdrop-blur-md cursor-zoom-out p-4"
               style={{ zIndex: 999999 }} 
             >
-              
-              {/* BUTTONS */}
-              <div 
-                className="absolute flex gap-4 z-[1000000]"
-                style={{ top: '1.5rem', right: '1.5rem' }}
-              >
+              <div className="absolute flex gap-3 top-6 right-6 z-[1000000]">
                 <a 
                   href={selectedMedia.mediaSrc} 
                   download={selectedMedia.title}
                   onClick={(e) => e.stopPropagation()} 
-                  className="text-slate-700 bg-white/90 hover:bg-pink-500 hover:text-white rounded-full p-3 backdrop-blur-sm transition-colors shadow-lg border border-pink-100 flex items-center justify-center"
-                  title="Download"
+                  className="text-slate-700 bg-white/90 hover:bg-pink-500 hover:text-white rounded-full p-3 transition-colors shadow-lg border border-pink-100 flex items-center justify-center"
                 >
-                  <Download size={24} />
+                  <Download size={20} />
                 </a>
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedMedia(null);
-                  }}
-                  className="text-slate-700 bg-white/90 hover:bg-pink-500 hover:text-white rounded-full p-3 backdrop-blur-sm transition-colors shadow-lg border border-pink-100 flex items-center justify-center"
-                  title="Close"
+                  onClick={(e) => { e.stopPropagation(); setSelectedMedia(null); }}
+                  className="text-slate-700 bg-white/90 hover:bg-pink-500 hover:text-white rounded-full p-3 transition-colors shadow-lg border border-pink-100 flex items-center justify-center"
                 >
-                  <X size={24} />
+                  <X size={20} />
                 </button>
               </div>
 
-              {/* IMAGE CONTAINER */}
               <motion.div
-                initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="flex flex-col items-center justify-center cursor-default w-full max-w-[90vw] h-full max-h-[90vh] min-h-0"
+                className="flex flex-col items-center justify-center w-full max-w-5xl h-full"
               >
-                {selectedMedia.type === 'video' ? (
-                  <video 
-                    src={selectedMedia.mediaSrc} 
-                    controls 
-                    autoPlay 
-                    className="w-auto h-auto max-w-full rounded-xl shadow-2xl bg-black border-2 border-pink-500/20 object-contain shrink-0" 
-                    style={{ maxHeight: '75vh' }}
-                  />
-                ) : (
-                  <img 
-                    src={selectedMedia.mediaSrc} 
-                    alt={selectedMedia.title} 
-                    className="w-auto h-auto max-w-full rounded-xl shadow-2xl border-2 border-pink-500/20 object-contain shrink-0" 
-                    style={{ maxHeight: '75vh' }}
-                  />
-                )}
-
-                {/* TEXT CONTAINER */}
-                <div className="mt-6 text-center text-white bg-black/60 px-8 py-3 rounded-full border border-white/10 shadow-xl backdrop-blur-md shrink-0">
-                  <h3 className="font-serif text-2xl font-bold">{selectedMedia.title}</h3>
-                  <p className="text-xs font-bold text-pink-400 uppercase tracking-widest mt-1">{selectedMedia.subtitle}</p>
+                <div className="relative w-full h-[70vh] flex items-center justify-center">
+                  {selectedMedia.type === 'video' ? (
+                    <video src={selectedMedia.mediaSrc} controls autoPlay className="max-w-full max-h-full rounded-xl shadow-2xl bg-black border border-white/10 object-contain" />
+                  ) : (
+                    <img src={selectedMedia.mediaSrc} alt={selectedMedia.title} className="max-w-full max-h-full rounded-xl shadow-2xl border border-white/10 object-contain" />
+                  )}
+                </div>
+                <div className="mt-8 text-center text-white bg-white/10 px-6 sm:px-10 py-3 sm:py-4 rounded-full border border-white/20 backdrop-blur-lg">
+                  <h3 className="font-serif text-lg sm:text-2xl font-bold">{selectedMedia.title}</h3>
+                  <p className="text-[10px] sm:text-xs font-bold text-pink-400 uppercase tracking-widest mt-1">{selectedMedia.subtitle}</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -579,7 +533,6 @@ const coupleMedia: MediaPolaroidProps[] & { id: string }[] = [
         </AnimatePresence>,
         document.body 
       )}
-
     </main>
   );
 }
