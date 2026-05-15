@@ -178,21 +178,26 @@ const HomePageContent = () => {
   }, []);
 
   return (
-    // Removed 'overflow-x-hidden' from here to fix the double scrollbar
     <main className="min-h-screen flex flex-col items-center pb-20 px-6 relative bg-[#FFF5F7] text-slate-900">
       
-      <FloatingHearts />
-      
-      <motion.div 
-        animate={{ y: [0, -20, 0], scale: [1, 1.05, 1] }} 
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 left-0 w-[500px] h-[500px] bg-pink-200/40 rounded-full filter blur-[120px] pointer-events-none z-0" 
-      />
-      <motion.div 
-        animate={{ y: [0, 20, 0], scale: [1, 1.1, 1] }} 
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-pink-300/30 rounded-full filter blur-[150px] pointer-events-none z-0" 
-      />
+      {/* FIX: We moved the floating hearts AND the background blobs into this 
+        fixed, overflow-hidden wrapper. Now they act like a wallpaper and 
+        cannot cause scrollbars, no matter what!
+      */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <FloatingHearts />
+        
+        <motion.div 
+          animate={{ y: [0, -20, 0], scale: [1, 1.05, 1] }} 
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-200/40 rounded-full filter blur-[120px]" 
+        />
+        <motion.div 
+          animate={{ y: [0, 20, 0], scale: [1, 1.1, 1] }} 
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-pink-300/30 rounded-full filter blur-[150px]" 
+        />
+      </div>
 
       <div style={{ minHeight: '30px' }} className="w-full relative z-10 flex-shrink-0"></div>
 
