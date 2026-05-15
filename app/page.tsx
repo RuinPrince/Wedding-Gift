@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Calendar, Gift, Lock, Volume2, VolumeX } from 'lucide-react';
+import { Heart, Calendar, Gift, Lock } from 'lucide-react';
 
-import { TimelineSection } from '../components/TimelineSection';
+import { TimelineSection } from '../components/TimelineSection'; // Adjust path if needed
 
 // --- BACKGROUND FLOATING HEARTS ---
 const FloatingHearts = () => {
@@ -41,52 +41,6 @@ const FloatingHearts = () => {
   );
 };
 
-// --- AUDIO PLAYER COMPONENT ---
-const MusicPlayer = ({ startPlaying }: { startPlaying: boolean }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    // If the user JUST logged in, the browser allows autoplay because they clicked the login button!
-    if (startPlaying && audioRef.current) {
-      audioRef.current.volume = 0.5; // Set volume to 50%
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => {
-          console.log("Browser blocked autoplay on refresh. Waiting for user click.", err);
-          setIsPlaying(false);
-        });
-    }
-  }, [startPlaying]);
-
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  return (
-    <div className="fixed bottom-6 right-6 z-[99] flex flex-col items-center gap-2">
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={togglePlay}
-        className="w-14 h-14 bg-white/90 backdrop-blur-md border-2 border-pink-200 rounded-full flex items-center justify-center text-pink-500 shadow-[0_8px_30px_rgb(255,192,203,0.4)] hover:bg-pink-50 transition-colors"
-      >
-        {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
-      </motion.button>
-      
-      {/* UPDATE THIS SRC TO YOUR ACTUAL MUSIC FILE IN THE PUBLIC FOLDER */}
-      <audio ref={audioRef} src="/bg-music.mp3" loop preload="auto" />
-    </div>
-  );
-};
-
 // --- 1. THE LOGIN SCREEN ---
 const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
   const [username, setUsername] = useState('');
@@ -101,7 +55,7 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
 
     if ((u === 'pattuh' && p === 'potato') || (u === 'potato' && p === 'pattuh')) {
       setError(false);
-      onLogin(); // Unlock the vault!
+      onLogin(); // Trigger the unlock function!
     } else {
       setError(true); 
     }
@@ -117,7 +71,6 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
 
       <FloatingHearts />
       
-      {/* Adjusted blob sizes for mobile */}
       <div className="absolute top-0 left-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-pink-200/40 rounded-full filter blur-[100px] md:blur-[120px] pointer-events-none z-0" />
       <div className="absolute bottom-0 right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-pink-300/30 rounded-full filter blur-[120px] md:blur-[150px] pointer-events-none z-0" />
 
@@ -186,7 +139,7 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
 };
 
 // --- 2. THE MAIN HOMEPAGE CONTENT ---
-const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
+const HomePageContent = () => {
   const [timeSince, setTimeSince] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
   const [isMarried, setIsMarried] = useState(false);
 
@@ -223,13 +176,9 @@ const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
   return (
     <main className="min-h-screen flex flex-col items-center pb-20 px-4 sm:px-6 relative bg-[#FFF5F7] text-slate-900">
       
-      {/* MUSIC PLAYER INJECTED HERE */}
-      <MusicPlayer startPlaying={justLoggedIn} />
-
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <FloatingHearts />
         
-        {/* Adjusted blob sizes for mobile inside the main app */}
         <motion.div 
           animate={{ y: [0, -20, 0], scale: [1, 1.05, 1] }} 
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
@@ -258,7 +207,6 @@ const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
         </motion.div>
 
         <div className="relative inline-block mb-4 sm:mb-6">
-          {/* Responsive Text Sizing: 4xl on mobile, 6xl on tablet, 7xl on desktop */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif font-black text-slate-800 leading-[1.1] tracking-tight relative z-10">
             <motion.span className="inline-block" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>Congratulations</motion.span> 
             <br />
@@ -285,7 +233,6 @@ const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
       {/* --- THE STORY --- */}
       <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col gap-12 sm:gap-24">
         
-        {/* Story Block 1 */}
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -312,7 +259,6 @@ const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
           </div>
         </motion.div>
 
-        {/* Story Block 2 */}
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -321,7 +267,6 @@ const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
           transition={{ duration: 0.4 }}
           className="bg-white shadow-[0_15px_40px_rgba(244,114,182,0.15)] rounded-3xl md:rounded-[2rem] overflow-hidden border border-pink-100 grid grid-cols-1 md:grid-cols-2 w-full transition-all duration-300"
         >
-          {/* order-last on mobile makes the image appear below the text, order-first on desktop makes it left aligned */}
           <div className="bg-[#F8E1E8] min-h-[300px] sm:min-h-[400px] md:min-h-[500px] flex items-center justify-center relative overflow-hidden order-last md:order-first group p-4 sm:p-8">
              <motion.div whileHover={{ scale: 1.05, rotate: -3 }} transition={{ type: "spring", bounce: 0.6 }} className="w-full h-full">
                <img 
@@ -376,7 +321,6 @@ const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
             </div>
           </div>
           
-          {/* Responsive Timer grid */}
           <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 sm:gap-6 md:gap-8 justify-center">
             {Object.entries(timeSince).map(([unit, value], i) => (
               <motion.div 
@@ -404,14 +348,14 @@ const HomePageContent = ({ justLoggedIn }: { justLoggedIn: boolean }) => {
 // --- 3. MAIN APP CONTROLLER ---
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  
-  // Track if the user JUST typed the password and hit enter
-  const [justLoggedIn, setJustLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     const unlocked = sessionStorage.getItem('vaultUnlocked');
     if (unlocked === 'true') {
       setIsAuthenticated(true);
+      // Failsafe: if they refresh the page and are already unlocked, 
+      // we still tell the global music player they are authenticated.
+      window.dispatchEvent(new Event('unlockVault')); 
     } else {
       setIsAuthenticated(false);
     }
@@ -419,7 +363,11 @@ export default function App() {
 
   const handleLoginSuccess = () => {
     sessionStorage.setItem('vaultUnlocked', 'true');
-    setJustLoggedIn(true); // Flag to tell the music player "Hey, they just clicked a button! Play!"
+    
+    // THIS IS THE MAGIC GLUE! 
+    // This broadcasts a message to your new GlobalMusicPlayer component to start playing!
+    window.dispatchEvent(new Event('unlockVault')); 
+    
     setIsAuthenticated(true);
   };
 
@@ -435,6 +383,7 @@ export default function App() {
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.5 }}
         >
+          {/* We pass the handleLoginSuccess function down here */}
           <LoginScreen onLogin={handleLoginSuccess} />
         </motion.div>
       ) : (
@@ -444,8 +393,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          {/* Pass the flag down */}
-          <HomePageContent justLoggedIn={justLoggedIn} />
+          <HomePageContent />
         </motion.div>
       )}
     </AnimatePresence>
