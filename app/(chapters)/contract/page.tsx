@@ -41,20 +41,46 @@ const FloatingHearts = () => {
 
 export default function ContractPage() {
   return (
-    <main className="relative min-h-screen pt-4 sm:pt-8 md:pt-12 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
+    // FIX: Increased pt-24 sm:pt-28 to ensure the fixed Navbar doesn't cut the title
+    <main className="relative min-h-screen pt-24 sm:pt-28 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
       
       {/* Floating Hearts Background */}
       <FloatingHearts />
 
+      {/* --- STANDARDIZED HEADER SECTION (RESTORED) --- */}
+      <div className="relative z-10 text-center mb-12 flex flex-col items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center w-full"
+        >
+          {/* Circular FileSignature Icon */}
+          <div className="inline-flex items-center justify-center p-3 sm:p-4 bg-pink-100 text-pink-500 rounded-full mb-6 shadow-sm">
+            <FileSignature className="w-6 h-6 sm:w-8 sm:h-8" />
+          </div>
+          
+          {/* Title Flanked by Hearts */}
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-pink-600 mb-4 font-bold flex items-center justify-center gap-2 sm:gap-4 text-center">
+            <Heart className="text-pink-500 fill-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
+            The Official Love Contract
+            <Heart className="text-pink-500 fill-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
+          </h2>
+          
+          <p className="text-sm sm:text-base text-slate-500 max-w-xl mx-auto px-2">
+            The Bride's Party has laid out the terms. Read the preview below before viewing the official, legally binding document!
+          </p>
+        </motion.div>
+      </div>
+
+      {/* --- THE CONTRACT CONTENT --- */}
       <motion.div 
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        // FIX: Used pure bg-white. 
-        // FIX: Changed uniform padding to explicit top/side/bottom padding to remove the huge gap at the bottom!
+        // Pure White Paper Background
         className="relative z-10 max-w-3xl mx-auto w-full bg-white border-[3px] sm:border-4 border-slate-800 px-6 pt-8 pb-6 sm:px-10 sm:pt-10 sm:pb-8 md:px-12 md:pt-12 md:pb-8 shadow-2xl"
       >
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-black uppercase text-slate-900 tracking-widest">
+        <div className="text-center mb-6 sm:mb-8 text-slate-900">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-black uppercase tracking-widest">
             Love Agreement
           </h1>
           <hr className="border-t-2 sm:border-t-[3px] border-slate-800 mt-4 sm:mt-6" />
@@ -88,7 +114,7 @@ export default function ContractPage() {
           </ol>
 
           <motion.a 
-            href="/Love_Agreement.pdf" 
+            href="/agreement.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
             whileHover={{ scale: 1.02 }}
