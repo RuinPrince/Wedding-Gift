@@ -1,92 +1,105 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, FileSignature } from 'lucide-react';
 
+// --- BACKGROUND FLOATING HEARTS ---
+const FloatingHearts = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={`heart-${i}`}
+          className="absolute text-pink-300/30"
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: window.innerHeight + 100,
+            scale: Math.random() * 0.5 + 0.5,
+          }}
+          animate={{
+            y: -100,
+            rotate: Math.random() * 360,
+          }}
+          transition={{
+            duration: Math.random() * 10 + 15,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 10,
+          }}
+        >
+          <Heart fill="currentColor" size={32} />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
 export default function ContractPage() {
   return (
-    <main className="min-h-screen py-24 px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50">
+    <main className="relative min-h-screen pt-4 sm:pt-8 md:pt-12 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
       
-      {/* Header Section */}
-      <div className="text-center mb-12 flex flex-col items-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center"
-        >
-          {/* NEW: Moved the FileSignature icon up here into the standard pink circle */}
-          <div className="inline-flex items-center justify-center p-4 bg-pink-100 text-pink-500 rounded-full mb-6 shadow-sm">
-            <FileSignature size={32} />
-          </div>
+      {/* Floating Hearts Background */}
+      <FloatingHearts />
 
-          <h2 className="text-4xl md:text-5xl font-serif text-pink-600 mb-6 font-bold flex items-center justify-center gap-4">
-            {/* NOTE: Kept these as fill-pink-500 since that's how they are in your image, 
-                but you can remove 'fill-pink-500' if you want outline hearts like the other pages! */}
-            <Heart className="text-pink-500 fill-pink-500 hidden md:block" size={36} strokeWidth={2.5} />
-            The Official Love Contract
-            <Heart className="text-pink-500 fill-pink-500 hidden md:block" size={36} strokeWidth={2.5} />
-          </h2>
-          <p className="text-slate-500 max-w-lg mx-auto">
-            The Bride's Party has laid out the terms. Read the preview below before viewing the official, legally binding document!
-          </p>
-        </motion.div>
-      </div>
-
-      {/* The Teaser Document Container */}
       <motion.div 
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="max-w-3xl mx-auto w-full bg-[#EFEFEF] bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] border-x-4 border-t-8 border-b-4 border-slate-800 p-8 md:p-12 shadow-2xl relative"
+        // FIX: Used pure bg-white. 
+        // FIX: Changed uniform padding to explicit top/side/bottom padding to remove the huge gap at the bottom!
+        className="relative z-10 max-w-3xl mx-auto w-full bg-white border-[3px] sm:border-4 border-slate-800 px-6 pt-8 pb-6 sm:px-10 sm:pt-10 sm:pb-8 md:px-12 md:pt-12 md:pb-8 shadow-2xl"
       >
-        {/* Document Title */}
-        <div className="text-center border-b-2 border-slate-400 pb-6 mb-8 text-slate-900">
-          {/* REMOVED: The icon from here */}
-          <h1 className="text-4xl md:text-5xl font-serif font-black tracking-widest uppercase">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-black uppercase text-slate-900 tracking-widest">
             Love Agreement
           </h1>
+          <hr className="border-t-2 sm:border-t-[3px] border-slate-800 mt-4 sm:mt-6" />
         </div>
 
-        {/* Document Preview Text */}
-        <div className="font-serif text-lg text-slate-900 space-y-6 leading-relaxed relative pb-20">
-          <p className="font-bold">Dear Bharath Anna,</p>
-          <p className="font-medium">Before handing over our precious Harini ❤️, the Bride's Party has a few preliminary conditions 👇</p>
+        <div className="font-serif leading-relaxed text-slate-800 text-base sm:text-lg md:text-xl space-y-6 sm:space-y-8">
           
-          <ul className="space-y-6 ml-2">
-            <li className="flex gap-3">
-              <span className="font-bold">1.</span> 
-              <span><span className="font-bold">The 'Not Hungry' Clause:</span> Whenever Harini says "I'm not hungry," Bharath is legally obligated to order extra fries, as she will inevitably eat half of his without warning 🍟</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold">2.</span> 
-              <span><span className="font-bold">The Mandatory Compliment Act:</span> Any slight change in hairstyle, nail polish color, or outfit must be noticed within 5 business seconds and complimented enthusiastically ✨</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold">3.</span> 
-              <span><span className="font-bold">The Swiggy/Zomato Protocol:</span> All food delivery passwords must be surrendered immediately. Random midnight cravings are to be treated as top-level emergencies 🚨</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold">4.</span> 
-              <span><span className="font-bold">The Shopping Endurance Policy:</span> Holding shopping bags is not considered a workout, but it is a mandatory, lifelong duty. Sighing loudly is strictly prohibited...</span>
-            </li>
-          </ul>
+          <div>
+            <p className="font-bold text-lg sm:text-xl md:text-2xl mb-2">Dear Bharath Anna,</p>
+            <p>
+              Before handing over our precious Harini 💖, the Bride's Party has a few preliminary conditions 👇
+            </p>
+          </div>
 
-          {/* This creates the "Fade Out" effect over the bottom text */}
-          <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-[#EFEFEF] to-transparent pointer-events-none" />
+          <ol className="space-y-5 sm:space-y-6 list-decimal list-outside ml-5 sm:ml-6">
+            <li className="pl-2">
+              <strong>The 'Not Hungry' Clause:</strong> Whenever Harini says "I'm not hungry," Bharath is legally obligated to order extra fries, as she will inevitably eat half of his without warning 🍟
+            </li>
+            
+            <li className="pl-2">
+              <strong>The Mandatory Compliment Act:</strong> Any slight change in hairstyle, nail polish color, or outfit must be noticed within 5 business seconds and complimented enthusiastically ✨
+            </li>
+            
+            <li className="pl-2">
+              <strong>The Swiggy/Zomato Protocol:</strong> All food delivery passwords must be surrendered immediately. Random midnight cravings are to be treated as top-level emergencies 🚨
+            </li>
+            
+            <li className="pl-2">
+              <strong>The Shopping Endurance Policy:</strong> Holding shopping bags is not considered a workout, but it is a mandatory, lifelong duty. Sighing loudly is strictly prohibited...
+            </li>
+          </ol>
+
+          <motion.a 
+            href="/Love_Agreement.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="mt-8 sm:mt-10 flex items-center justify-center gap-2 w-full py-3 sm:py-4 bg-pink-500 text-white font-bold rounded-xl shadow-[0_5px_0_rgb(219,39,119)] hover:translate-y-[2px] hover:shadow-[0_3px_0_rgb(219,39,119)] transition-all text-sm sm:text-base uppercase tracking-wider"
+          >
+            Read the full contract ↓
+          </motion.a>
+
         </div>
-
-        {/* Link to Full PDF */}
-        <motion.a 
-          href="/agreement.pdf" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="relative z-10 mt-4 block text-center w-full py-4 bg-pink-500 text-white font-bold rounded-xl shadow-[0_5px_0_rgb(219,39,119)] hover:translate-y-[2px] hover:shadow-[0_3px_0_rgb(219,39,119)] transition-all uppercase tracking-wider"
-        >
-          Read The Full Contract ↓
-        </motion.a>
       </motion.div>
-
     </main>
   );
 }

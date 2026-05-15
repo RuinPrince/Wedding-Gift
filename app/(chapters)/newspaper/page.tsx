@@ -43,7 +43,7 @@ export default function NewspaperPage() {
   return (
     <main className="relative min-h-screen pt-4 sm:pt-8 md:pt-12 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
       
-      {/* ADDED: Floating Hearts Background */}
+      {/* Floating Hearts Background */}
       <FloatingHearts />
 
       {/* Header Section */}
@@ -95,12 +95,15 @@ export default function NewspaperPage() {
         {/* RESPONSIVE GRID: 1 column on mobile, 2 on desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center font-serif leading-relaxed">
           
-          {/* FIX: object-cover makes the image perfectly fill the square box */}
+          {/* FIX: object-position centers the face perfectly, object-cover fills the square box */}
           <div className="aspect-square bg-slate-200 border-2 border-slate-800 flex items-center justify-center relative overflow-hidden group w-full max-w-md mx-auto md:max-w-none">
-             <img 
-                src="/photos/news.jpg" 
-                alt="Couple" 
-                className="w-full h-full object-cover"
+              {/* Cute Tape Graphic - Added for effect */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-white/60 backdrop-blur-sm shadow-sm border border-black/5 rotate-2 z-10" />
+              <img 
+                 src="/photos/news.jpg" 
+                 alt="Couple" 
+                 // FIX: Changed default center to center-top (object-[center_30%]) to keep faces perfectly centered and un-cropped within the square!
+                 className="w-full h-full object-cover object-[center_30%] transition-transform duration-300 group-hover:scale-105"
               />
           </div>
           
