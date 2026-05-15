@@ -1,8 +1,43 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// ADDED: Imported Heart here
 import { Moon, Star, Sparkles, Heart } from 'lucide-react';
+
+// --- BACKGROUND FLOATING HEARTS ---
+const FloatingHearts = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={`heart-${i}`}
+          className="absolute text-pink-300/30"
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: window.innerHeight + 100,
+            scale: Math.random() * 0.5 + 0.5,
+          }}
+          animate={{
+            y: -100,
+            rotate: Math.random() * 360,
+          }}
+          transition={{
+            duration: Math.random() * 10 + 15,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 10,
+          }}
+        >
+          <Heart fill="currentColor" size={32} />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 export default function BirthdayMoons() {
   const coupleMoons = [
@@ -25,29 +60,30 @@ export default function BirthdayMoons() {
   ];
 
   return (
-    // FIX: Changed py-24 to pt-8 md:pt-12 pb-24 to remove the top gap, and adjusted mobile px
-    <section className="pt-8 md:pt-12 pb-24 px-4 sm:px-6 relative z-10 overflow-hidden bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 min-h-screen">
+    // FIX: Completely removed the pt-8 and md:pt-12 classes. Replaced with pt-2 to eliminate the gap!
+    <section className="pt-2 sm:pt-4 pb-24 px-4 sm:px-6 relative z-10 overflow-hidden bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 min-h-screen">
+      
+      <FloatingHearts />
       
       {/* Decorative background stars */}
-      <div className="absolute inset-0 pointer-events-none opacity-50">
+      <div className="absolute inset-0 pointer-events-none opacity-50 z-0">
          <Star size={24} className="absolute top-10 left-4 sm:left-10 text-pink-300" />
          <Star size={16} className="absolute bottom-20 right-10 sm:right-20 text-pink-300" />
          <Star size={32} className="absolute top-40 right-16 sm:right-32 text-pink-200 hidden sm:block" />
       </div>
 
-      <div className="max-w-5xl mx-auto text-center">
+      <div className="max-w-5xl mx-auto text-center relative z-10">
+        
         <div className="inline-flex items-center justify-center p-3 sm:p-4 bg-pink-100 text-pink-500 rounded-full mb-4 sm:mb-6">
           <Moon className="w-6 h-6 sm:w-8 sm:h-8" />
         </div>
         
-        {/* RESPONSIVE TITLE */}
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-pink-600 mb-6 sm:mb-8 font-bold flex items-center justify-center gap-2 sm:gap-4">
           <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
           Written in the Stars
           <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
         </h2>
         
-        {/* THE NEW COSMIC COINCIDENCE BANNER */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -60,12 +96,11 @@ export default function BirthdayMoons() {
           <div>
             <h4 className="font-bold text-pink-600 uppercase tracking-widest text-xs sm:text-sm mb-1">Cosmic Coincidence</h4>
             <p className="text-slate-700 font-serif leading-relaxed text-sm sm:text-base">
-              Despite being born six years apart, Bharath and Harini were born under the exact same moon phase—the <strong>Waning Crescent</strong>. Some things truly are just written in the stars! ✨
+              Despite being born six years apart, Potato and Pattuh were born under the exact same moon phase—the <strong>Waning Crescent</strong>. Some things truly are just written in the stars! ✨
             </p>
           </div>
         </motion.div>
 
-        {/* RESPONSIVE GRID FOR MOON CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
           {coupleMoons.map((moon, index) => (
             <motion.div
@@ -79,7 +114,6 @@ export default function BirthdayMoons() {
               <h3 className="text-xs sm:text-sm font-bold text-pink-400 uppercase tracking-widest mb-1">{moon.role}'s Moon</h3>
               <p className="font-serif text-xl sm:text-2xl font-bold text-slate-800 mb-6">{moon.date}</p>
               
-              {/* Scaled down image for mobile */}
               <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-6 sm:mb-8 rounded-full bg-black shadow-[0_0_40px_rgba(244,114,182,0.3)] flex items-center justify-center overflow-hidden">
                 <img 
                   src={moon.imageSrc} 
