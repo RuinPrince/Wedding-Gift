@@ -60,7 +60,6 @@ export default function BirthdayMoons() {
   ];
 
   return (
-    // FIX: Completely removed the pt-8 and md:pt-12 classes. Replaced with pt-2 to eliminate the gap!
     <section className="pt-2 sm:pt-4 pb-24 px-4 sm:px-6 relative z-10 overflow-hidden bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 min-h-screen">
       
       <FloatingHearts />
@@ -84,19 +83,20 @@ export default function BirthdayMoons() {
           <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
         </h2>
         
+        {/* REVERTED TO IMAGE 1 LAYOUT: Wide banner, centered icon on top, centered text */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="max-w-2xl mx-auto bg-white/60 backdrop-blur-sm border-2 border-pink-200 p-5 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm mb-8 sm:mb-12 flex flex-col md:flex-row items-center gap-3 sm:gap-4 text-center md:text-left"
+          className="max-w-4xl mx-auto bg-white/60 backdrop-blur-sm border-2 border-pink-200 p-6 sm:p-8 rounded-2xl sm:rounded-[2rem] shadow-sm mb-8 sm:mb-12 flex flex-col items-center text-center"
         >
-          <div className="bg-pink-100 p-3 rounded-full text-pink-500 shrink-0">
-            <Sparkles size={24} />
+          <div className="bg-pink-100 p-3 rounded-full text-pink-500 mb-4 shrink-0">
+            <Sparkles size={28} />
           </div>
-          <div>
-            <h4 className="font-bold text-pink-600 uppercase tracking-widest text-xs sm:text-sm mb-1">Cosmic Coincidence</h4>
-            <p className="text-slate-700 font-serif leading-relaxed text-sm sm:text-base">
-              Despite being born six years apart, Potato and Pattuh were born under the exact same moon phase—the <strong>Waning Crescent</strong>. Some things truly are just written in the stars! ✨
+          <div className="max-w-3xl">
+            <h4 className="font-bold text-pink-600 uppercase tracking-widest text-sm sm:text-base mb-2">Cosmic Coincidence</h4>
+            <p className="text-slate-700 font-serif leading-relaxed text-base sm:text-lg">
+              Despite being born six years apart, Bharath and Harini were born under the exact same moon phase—the <strong>Waning Crescent</strong>. Some things truly are just written in the stars! ✨
             </p>
           </div>
         </motion.div>
