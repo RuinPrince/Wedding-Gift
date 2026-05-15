@@ -74,13 +74,13 @@ export default function SymphonyPage() {
     {
       id: 1,
       title: "Manamaganin sathiyam",
-      subtitle: "Official Vows",
+      subtitle: "",
       src: "/videos/nith1.mp4"
     },
     {
       id: 2,
       title: "Nelothi", 
-      subtitle: "The Melody", 
+      subtitle: "", 
       src: "/videos/nith2.mp4" 
     }
   ];

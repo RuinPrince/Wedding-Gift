@@ -66,13 +66,13 @@ const VideoPolaroid = ({ title, subtitle, videoSrc }: { title: string, subtitle:
 
 export default function VoicesPage() {
   const friendsVideos = [
-    { id: 1, title: "Deivanai", subtitle: "Tech Crew", src: "/videos/Deiva.mp4" },
-    { id: 2, title: "Mahalakshmi", subtitle: "Bestie", src: "/videos/Maha.m4v" },
-    { id: 3, title: "Divyashree", subtitle: "Tech Crew", src: "/videos/Divya.mp4" },
-    { id: 4, title: "Ilakkiya", subtitle: "Tech Crew", src: "/videos/Ilaki.m4v" },
-    { id: 5, title: "Aswin", subtitle: "Tech Crew", src: "/videos/Ash.mp4" },
-    { id: 6, title: "Divakar", subtitle: "Tech Crew", src: "/videos/Diva.mp4" },
-    { id: 7, title: "Nithish", subtitle: "Tech Crew", src: "/videos/Nithish.mp4"}
+    { id: 1, title: "Deivanai", subtitle: "", src: "/videos/Deiva.mp4" },
+    { id: 2, title: "Mahalakshmi", subtitle: "", src: "/videos/Maha.m4v" },
+    { id: 3, title: "Divyashree", subtitle: "", src: "/videos/Divya.mp4" },
+    { id: 4, title: "Ilakkiya", subtitle: "", src: "/videos/Ilaki.m4v" },
+    { id: 5, title: "Aswin", subtitle: "", src: "/videos/Ash.mp4" },
+    { id: 6, title: "Divakar", subtitle: "", src: "/videos/Diva.mp4" },
+    { id: 7, title: "Nithish", subtitle: "", src: "/videos/Nithish.mp4"}
   ];
 
   return (

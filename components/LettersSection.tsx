@@ -127,15 +127,13 @@ export default function LettersSection() {
   if (!isMounted) return null;
 
   return (
-    // We use a flex column here so we can center the locked state perfectly!
-    <main className="relative min-h-screen flex flex-col pt-24 sm:pt-32 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
+    // FIX: Reduced pt-24 sm:pt-32 down to pt-16 sm:pt-20 to completely remove the massive gap!
+    <main className="relative min-h-screen flex flex-col pt-16 sm:pt-20 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
       
-      {/* Background Hearts */}
       <FloatingHearts />
 
       {/* --- THE LOCKED STATE UI --- */}
       {!isUnlocked ? (
-        // FIX: Replaced min-h-[60vh] with flex-grow to perfectly center the card in the available space
         <div className="flex-grow flex items-center justify-center relative z-10 w-full">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -190,7 +188,6 @@ export default function LettersSection() {
       // --- THE UNLOCKED STATE UI ---
         <div className="max-w-6xl mx-auto w-full relative z-10">
           
-          {/* Header Section */}
           <div className="text-center mb-10 sm:mb-16 flex flex-col items-center">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -201,7 +198,6 @@ export default function LettersSection() {
                 <Mail className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
 
-              {/* Responsive Header */}
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-pink-600 mb-4 font-bold flex items-center justify-center gap-2 sm:gap-4 text-center">
                 <Heart className="text-pink-500 hidden sm:block w-7 h-7 md:w-9 md:h-9" strokeWidth={2.5} />
                 Letters of Love
@@ -214,7 +210,6 @@ export default function LettersSection() {
             </motion.div>
           </div>
 
-          {/* Responsive Grid for Letters */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
             {lettersData.map((letter, index) => (
               <motion.div 
@@ -225,12 +220,10 @@ export default function LettersSection() {
                 key={letter.id} 
                 className="w-full bg-white/90 backdrop-blur-md border-2 border-pink-100 rounded-[2rem] p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgb(255,192,203,0.3)] relative flex flex-col hover:-translate-y-1 transition-all duration-300 min-h-full"
               >
-                {/* Date at the top right */}
                 <div className="text-right text-xs sm:text-sm text-pink-400 mb-6 font-serif font-bold uppercase tracking-widest">
                   {letter.date}
                 </div>
                 
-                {/* Letter Content: Left aligned */}
                 <div className="text-slate-700 font-serif text-base sm:text-lg leading-relaxed mb-10 flex-grow text-left">
                   {letter.content.split('\n').map((line, i) => (
                     <React.Fragment key={i}>
@@ -240,7 +233,6 @@ export default function LettersSection() {
                   ))}
                 </div>
                 
-                {/* Signature at the bottom right */}
                 <div className="text-right mt-auto pt-6 border-t border-pink-100">
                   <span className="font-medium text-slate-400 text-sm mr-2 italic">With love,</span>
                   <br />
