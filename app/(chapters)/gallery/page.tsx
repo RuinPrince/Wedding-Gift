@@ -490,9 +490,9 @@ const coupleMedia: MediaPolaroidProps[] & { id: string }[] = [
           
           {/* Photo Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {activeMedia.map((media) => (
-              <MediaPolaroid 
-                key={media.id} 
+            {activeMedia.map((media, index) => (
+              <MediaPolaroid
+                key={index}
                 type={media.type} 
                 title={media.title} 
                 subtitle={media.subtitle} 
