@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Calendar, Gift, Camera, Lock } from 'lucide-react';
 
 import { TimelineSection } from '../components/TimelineSection';
@@ -147,13 +147,6 @@ const HomePageContent = () => {
   const [timeSince, setTimeSince] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
   const [isMarried, setIsMarried] = useState(false);
 
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
   useEffect(() => {
     const weddingDate = new Date("2026-05-18T09:30:00").getTime(); 
     
@@ -185,13 +178,9 @@ const HomePageContent = () => {
   }, []);
 
   return (
-    <main className="min-h-screen flex flex-col items-center pb-20 px-6 relative bg-[#FFF5F7] text-slate-900 overflow-x-hidden">
+    // Removed 'overflow-x-hidden' from here to fix the double scrollbar
+    <main className="min-h-screen flex flex-col items-center pb-20 px-6 relative bg-[#FFF5F7] text-slate-900">
       
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1.5 md:h-2 bg-gradient-to-r from-pink-300 via-pink-500 to-rose-400 origin-left z-50 shadow-[0_0_10px_rgba(236,72,153,0.5)]"
-        style={{ scaleX }}
-      />
-
       <FloatingHearts />
       
       <motion.div 
