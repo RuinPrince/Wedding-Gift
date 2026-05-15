@@ -127,15 +127,16 @@ export default function LettersSection() {
   if (!isMounted) return null;
 
   return (
-    // Wrap the entire page in a responsive main tag that accounts for the fixed Navbar
-    <main className="relative min-h-screen pt-24 sm:pt-32 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
+    // We use a flex column here so we can center the locked state perfectly!
+    <main className="relative min-h-screen flex flex-col pt-24 sm:pt-32 pb-24 px-4 sm:px-6 bg-gradient-to-b from-[#FFF5F7] to-pink-50/50 overflow-hidden">
       
-      {/* Background Hearts for both Locked and Unlocked states */}
+      {/* Background Hearts */}
       <FloatingHearts />
 
       {/* --- THE LOCKED STATE UI --- */}
       {!isUnlocked ? (
-        <div className="flex items-center justify-center min-h-[60vh] relative z-10">
+        // FIX: Replaced min-h-[60vh] with flex-grow to perfectly center the card in the available space
+        <div className="flex-grow flex items-center justify-center relative z-10 w-full">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -150,7 +151,7 @@ export default function LettersSection() {
               
               <h2 className="text-3xl font-serif font-black text-slate-800 mb-2">Top Secret</h2>
               <p className="text-slate-500 mb-8 text-sm px-2">
-                These letters are meant only for your eyes. Enter the secret code to unlock.
+                These letters are meant for future. Enter the secret code to unlock in the future.
               </p>
 
               <form onSubmit={handleUnlock} className="w-full space-y-5">
@@ -187,7 +188,7 @@ export default function LettersSection() {
       ) : (
 
       // --- THE UNLOCKED STATE UI ---
-        <div className="max-w-6xl mx-auto relative z-10">
+        <div className="max-w-6xl mx-auto w-full relative z-10">
           
           {/* Header Section */}
           <div className="text-center mb-10 sm:mb-16 flex flex-col items-center">
@@ -222,7 +223,6 @@ export default function LettersSection() {
                 viewport={{ once: true }}
                 transition={{ delay: (index % 2) * 0.15 }} 
                 key={letter.id} 
-                // FIX: Clean, beautiful white/pink card matching Image 1
                 className="w-full bg-white/90 backdrop-blur-md border-2 border-pink-100 rounded-[2rem] p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgb(255,192,203,0.3)] relative flex flex-col hover:-translate-y-1 transition-all duration-300 min-h-full"
               >
                 {/* Date at the top right */}
@@ -230,7 +230,7 @@ export default function LettersSection() {
                   {letter.date}
                 </div>
                 
-                {/* Letter Content: Left aligned as requested */}
+                {/* Letter Content: Left aligned */}
                 <div className="text-slate-700 font-serif text-base sm:text-lg leading-relaxed mb-10 flex-grow text-left">
                   {letter.content.split('\n').map((line, i) => (
                     <React.Fragment key={i}>
