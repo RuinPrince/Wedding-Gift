@@ -7,7 +7,8 @@ import { usePathname } from 'next/navigation';
 const PLAYLIST = [
   '/music/song1.mp3',
   '/music/song2.mp3',
-  '/music/song3.mp3'
+  '/music/song3.mp3',
+  '/music/song4.mp3'
 ];
 
 export default function GlobalMusicPlayer() {
